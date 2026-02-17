@@ -1,0 +1,6 @@
+# .gitignore
+__pycache__/
+*.csv
+.DS_Store
+# We will keep the .db file for this project so recruiters can see it, 
+# but usually, you ignore large DBs.
