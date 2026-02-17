@@ -1,6 +1,6 @@
-# 📦 Inventory Optimizer
+# 📦 Inventory Analytics & Forecasting Engine
 
-An end-to-end multi-model pipeline that predicts stockout risks and forecasts sales using SQL and Machine Learning.
+An end-to-end data pipeline built to automate inventory auditing and forecast stockout risks using **SQL**, **Python**, and **Seaborn**.
 
 ## 🚀 Key Features
 * **SQL Relational Engine:** 
