@@ -1,6 +1,25 @@
-# .gitignore
-__pycache__/
+# 1. Environments
+# We ignore the virtual environment because it contains thousands of library files
+# that don't need to be on GitHub.
+.venv/
+env/
+venv/
+ENV/
+
+# 2. Data & Databases
+# We ignore CSVs and the local database to keep the repo light.
+# Recruiters will run your scripts to generate these themselves.
 *.csv
+data/*.db
+data/*.sqlite
+
+# 3. Python Temporary Files
+# These are created by Python when you run scripts and shouldn't be shared.
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 4. System Files
+# These are hidden files created by Windows or macOS.
 .DS_Store
-# We will keep the .db file for this project so recruiters can see it, 
-# but usually, you ignore large DBs.
+Thumbs.db
