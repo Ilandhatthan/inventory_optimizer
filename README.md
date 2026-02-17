@@ -1,41 +1,33 @@
-📦 **Project: Inventory Optimizer**
-This is an end-to-end data pipeline that handles everything from SQL database engineering to multi-model machine learning and Seaborn analytics.
+# 📦 Inventory Optimizer
 
-🚀 **Key Features**
-Database Power: Manages a relational schema with over 12,000 transaction rows.
+An end-to-end multi-model pipeline that predicts stockout risks and forecasts sales using SQL and Machine Learning.
 
-Data Cleaning: Uses Pandas to fix missing prices and filter out negative stock errors.
+## 🚀 Key Features
+* **SQL Relational Engine:** 
+Manages 12,000+ transaction rows across normalized tables.
+* **Multi-Model Pipeline:** 
+Compares Logistic Regression, Random Forest, and Linear Regression.
+* **Clean Data Ops:** 
+Professional-grade cleaning of missing prices and negative stock using Pandas.
+* **Visual Analytics:** 
+Diagnostic dashboard featuring correlation heatmaps and accuracy comparisons.
 
-Multi-Model ML: Compares Logistic Regression, Random Forest, and Linear Regression to find the best fit. 
+## 📊 Execute Pipeline
+Run the following scripts in order:
 
-Advanced Visuals: High-level Seaborn dashboard with heatmaps and feature analysis.
+1. **Build SQL Database:** 
+`python src/1_generate_db.py`
+2. **Clean & Join Data:** 
+`python src/2_clean_data.py`
+3. **Train ML Models:** 
+`python src/3_train_model.py`
+4. **Generate Visuals:** 
+`python src/4_visualize_results.py`
 
-📂 **System Architecture**
-To rebuild the project, run these scripts in this exact order:
+## 📉 Diagnostic Dashboard
+![Inventory Dashboard](data/advanced_diagnostic_dashboard.png)
 
-src/1_generate_db.py: 
-Builds the SQL database with 12k+ rows. 🏗️
-
-src/2_clean_data.py: 
-Cleans the uncleaned dataset using Python/Pandas. ✨
-
-src/3_train_model.py: 
-Trains multiple models and prints detailed metric reports. 📈
-
-src/4_visualize_results.py: 
-Generates the Seaborn diagnostic dashboard. 🎨
-
-📊 **Machine Learning Evaluation**
-We don't just guess; we compare models to see which one "hits" the hardest:
-
-**Model                   Purpose                         Strength**
-Logistic Regression     Baseline Risk Classification    Fast & Reliable
-Random Forest           Advanced Pattern Detection      High Accuracy
-Linear Regression       Sales Velocity Forecasting      Precise Predictions
-
-📉 **Visual Insights (Seaborn)**
-The final dashboard in your data/ folder includes:
-
-Correlation Heatmap: Shows how sales speed and lead times drive stockout risk. 🔥
-
-Feature Importance: Proves which variables are the real "bosses" in your model. 🎯
+## 🛠️ Tech Stack
+* **Database:** SQL (SQLite)
+* **ML Ops:** Scikit-Learn
+* **Visualization:** Seaborn, Matplotlib
