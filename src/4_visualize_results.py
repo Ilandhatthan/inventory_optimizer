@@ -1,39 +1,51 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np
-import os
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix
 
-# 1. Load the cleaned data
+# 1. Load data generated from your SQL and Pandas cleaning steps
 df = pd.read_csv('data/cleaned_inventory.csv')
 
-# Set professional technical style
-sns.set_theme(style="white")
-fig, axes = plt.subplots(2, 2, figsize=(18, 12))
-fig.suptitle('Inventory Optimization: Model Diagnostic Dashboard', fontsize=22, fontweight='bold')
+# 2. Setup Features and Target for Analysis
+X = df[['sales_velocity', 'lead_time']]
+y = df['stockout_risk']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# --- PLOT 1: Multivariate Analysis (Stock vs. Velocity) ---
-sns.scatterplot(ax=axes[0, 0], data=df, x='sales_velocity', y='current_stock', 
-                hue='stockout_risk', style='stockout_risk', palette='coolwarm', s=120, alpha=0.8)
-axes[0, 0].set_title('A. Class Separation: Inventory Dynamics', fontsize=15)
+# 3. Train Random Forest for Feature Importance Analysis
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X_train, y_train)
+y_pred = rf.predict(X_test)
 
-# --- PLOT 2: Correlation Matrix (Masked Triangle) ---
-corr = df.select_dtypes(include=[np.number]).corr()
-mask = np.triu(np.ones_like(corr, dtype=bool))
-sns.heatmap(ax=axes[0, 1], data=corr, mask=mask, annot=True, cmap='RdBu_r', center=0, fmt='.2f')
-axes[0, 1].set_title('B. Feature Inter-Correlation Matrix', fontsize=15)
+# 4. Set Advanced Seaborn Styling
+sns.set_theme(style="whitegrid", palette="viridis")
 
-# --- PLOT 3: Kernel Density Estimate (KDE) for Lead Time ---
-sns.kdeplot(ax=axes[1, 0], data=df, x='lead_time', hue='stockout_risk', fill=True, palette='viridis', bw_adjust=.5)
-axes[1, 0].set_title('C. Probabilistic Lead Time Impact on Risk', fontsize=15)
+# 5. Create the 4-in-1 Dashboard
+fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+fig.suptitle('Inventory Analysis Dashboard', fontsize=22, fontweight='bold')
 
-# --- PLOT 4: Advanced Boxen Plot for Pricing ---
-sns.boxenplot(ax=axes[1, 1], data=df, x='stockout_risk', y='price', palette='rocket')
-axes[1, 1].set_title('D. Price Tier Distribution across Risk Categories', fontsize=15)
+# --- Panel 1: Correlation Heatmap (Fixed for numeric only) ---
+numeric_df = df.select_dtypes(include=['float64', 'int64'])
+sns.heatmap(numeric_df.corr(numeric_only=True), annot=True, cmap='RdBu_r', center=0, ax=axes[0, 0])
+axes[0, 0].set_title('Feature Correlation: Multi-Variable Analysis')
 
-# Save high-res for GitHub
+# --- Panel 2: Sales Velocity Distribution by Risk ---
+sns.kdeplot(data=df, x='sales_velocity', hue='stockout_risk', fill=True, ax=axes[0, 1])
+axes[0, 1].set_title('Probability Density: Sales vs. Stockout Risk')
+
+# --- Panel 3: Confusion Matrix (Accuracy Analysis) ---
+cm = confusion_matrix(y_test, y_pred)
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[1, 0])
+axes[1, 0].set_xlabel('Predicted Risk Status')
+axes[1, 0].set_ylabel('Actual Risk Status')
+axes[1, 0].set_title('Model Confusion Matrix')
+
+# --- Panel 4: Feature Importance (Key Drivers) ---
+feat_importances = pd.Series(rf.feature_importances_, index=X.columns)
+feat_importances.sort_values().plot(kind='barh', color='teal', ax=axes[1, 1])
+axes[1, 1].set_title('Top Drivers of Inventory Stockouts')
+
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-os.makedirs('data', exist_ok=True)
 plt.savefig('data/advanced_diagnostic_dashboard.png', dpi=300)
-print("SUCCESS: Advanced dashboard saved to 'data/advanced_diagnostic_dashboard.png'")
-plt.show()
+print("Advanced 4-in-1 Dashboard saved to data/advanced_diagnostic_dashboard.png!")
